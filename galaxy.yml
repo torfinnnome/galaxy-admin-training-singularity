@@ -1,0 +1,44 @@
+---
+- hosts: galaxyservers
+  become: true
+  pre_tasks:
+    - name: Install Dependencies
+      package:
+#        name: ['git', 'make', 'python3-psycopg2', 'virtualenv', 'tar', 'bzip2']
+        # With CentOS:
+        name: ['git', 'make', 'python3-psycopg2', 'python36-virtualenv', 'tar', 'bzip2', 'epel-release']
+  handlers:
+    - name: Restart Galaxy
+      systemd:
+        name: galaxy
+        state: restarted
+  tasks:
+    - name: Install Singularity and Docker
+      package:
+        name: ['singularity', 'docker']
+    - name: Add docker group
+      group:
+          name: "docker"
+    - name: Make sure Docker is enabled
+      systemd:
+        state: started
+        name: docker
+        enabled: yes
+    - name: Add galaxy user to the docker group
+      user:
+        name: "{{ galaxy_user.name }}"
+        groups: ["docker"]
+        append: yes
+
+  roles:
+    - galaxyproject.postgresql
+    - role: natefoo.postgresql_objects
+      become: true
+      become_user: postgres
+    - geerlingguy.pip
+    - galaxyproject.galaxy
+    - role: uchida.miniconda
+      become: true
+      become_user: galaxy
+
+    - galaxyproject.cvmfs

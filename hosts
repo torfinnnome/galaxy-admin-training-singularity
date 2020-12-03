@@ -1,0 +1,2 @@
+[galaxyservers]
+gat-88.training.galaxyproject.eu ansible_connection=local

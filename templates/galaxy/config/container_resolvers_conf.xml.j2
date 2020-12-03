@@ -1,0 +1,8 @@
+<containers_resolvers>
+  <explicit />
+     <cached_mulled_singularity cache_directory="{{ galaxy_root }}/containers/singularity/mulled"/>
+     <!-- Disable the next line if you don't want to use pre-made Singularity containers served by CVMFS. -->
+     <cached_mulled_singularity cache_directory="{{ galaxy_singularity_images_cvmfs_path }}"/>
+     <mulled_singularity auto_install="True"/>
+     <build_mulled_singularity auto_install="True"/>
+</containers_resolvers>
