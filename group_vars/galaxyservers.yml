@@ -1,5 +1,5 @@
 ---
-# python3 support
+# Python 3 support
 pip_virtualenv_command: /usr/bin/python3 -m virtualenv # usegalaxy_eu.certbot, usegalaxy_eu.tiaas2, galaxyproject.galaxy
 certbot_virtualenv_package_name: python3-virtualenv    # usegalaxy_eu.certbot
 pip_package: python3-pip                               # geerlingguy.pip
@@ -16,35 +16,24 @@ galaxy_create_user: true
 galaxy_separate_privileges: true
 galaxy_manage_paths: true
 galaxy_layout: root-dir
-galaxy_root: "/srv/galaxy"
+galaxy_root: /srv/galaxy
 galaxy_user: {name: galaxy, shell: /bin/bash}
-galaxy_commit_id: "release_20.05"
+galaxy_commit_id: release_20.09
 galaxy_config_style: yaml
 galaxy_force_checkout: true
 miniconda_prefix: "{{ galaxy_tool_dependency_dir }}/_conda"
-miniconda_version: "4.6.14"
+miniconda_version: 4.7.12
 
 galaxy_config:
   galaxy:
-    brand: "CntainRwlz"
-    admin_users: admin@user
+    brand: Cntanrz4eva
+    admin_users: admin@example.org
     database_connection: "postgresql:///galaxy?host=/var/run/postgresql"
+    file_path: /data
     check_migrate_tools: false
     tool_data_path: "{{ galaxy_mutable_data_dir }}/tool-data"
-
-    # Containers
     job_config_file: "{{ galaxy_config_dir }}/job_conf.xml"
-    containers_resolvers_config_file: "{{ galaxy_config_dir }}/container_resolvers_conf.xml"
-    dependency_resolvers_config_file: "{{ galaxy_config_dir }}/dependency_resolvers_conf.xml"
-    singularity_volumes: "$galaxy_root:ro,$tool_directory:ro,$working_directory:rw,$job_directory:rw,/cvmfs/:ro"
-    singularity_default_container_id: '/cvmfs/singularity.galaxyproject.org/u/b/ubuntu:18.04'
-    singularity_run_extra_arguments: "-H {{ galaxy_root }}"
 
-    # CVMFS:
-    tool_data_table_config_path:
-      - /cvmfs/data.galaxyproject.org/byhand/location/tool_data_table_conf.xml
-      - /cvmfs/data.galaxyproject.org/managed/location/tool_data_table_conf.xml
-  
   uwsgi:
     http: 0.0.0.0:8080
     buffer-size: 16384
@@ -71,19 +60,10 @@ galaxy_config:
       - lib/galaxy/main.py
     farm: job-handlers:1,2
 
-
-galaxy_config_files:
-  - src: files/galaxy/config/job_conf.xml
-    dest: "{{ galaxy_config_dir }}/job_conf.xml"
-  - src: files/galaxy/config/dependency_resolvers_conf.xml
-    dest: "{{ galaxy_config_dir }}/dependency_resolvers_conf.xml"
-
 galaxy_config_templates:
-  - src: templates/galaxy/config/container_resolvers_conf.xml.j2
-    dest: "{{ galaxy_config_dir }}/container_resolvers_conf.xml"
+  - src: templates/galaxy/config/job_conf.xml.j2
+    dest: "{{ galaxy_config.galaxy.job_config_file }}"
 
-
-galaxy_singularity_images_cvmfs_path: "/cvmfs/singularity.galaxyproject.org/all/"
 
 # systemd
 galaxy_systemd_mode: mule
