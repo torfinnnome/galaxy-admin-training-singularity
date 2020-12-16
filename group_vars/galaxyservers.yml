@@ -26,7 +26,7 @@ miniconda_version: 4.7.12
 
 galaxy_config:
   galaxy:
-    brand: Cntanrz4eva
+    brand: C0ntainRZ4eva
     admin_users: admin@example.org
     database_connection: "postgresql:///galaxy?host=/var/run/postgresql"
     file_path: /data
